@@ -101,7 +101,7 @@ Auth RCL_TopLevelCheck
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
-bind_email | STRING | NO | `Used with email address for lock user. None means the first user who entry this code can use it. With email means the the first specific user who register Roostoo APP with this email address can use it.`
+bind_email | STRING | NO | `Used with email address for locking user. (None) means the first user who entry this code can use it. (With email) means the the first specific user who register Roostoo APP with this email address can use it.`
 
 **Response if success**
 ```json
@@ -219,8 +219,6 @@ Success | BOOL | Indicates is this request success
 ErrMsg | STRING | Error message, if "" means it's passed(Success=true), othervice it tells you about problem.
 LastUpdate | INT | The 13-digits millsecond timestamp marks update time of this rank.
 UpdateInterval | INT | The Integer marks as the update interval (minutes).
-
-
 DisplayName | STRING | The display name which is set by user OR auto set by OAUTH provider, such as Google OAuth. It could be "" if it is not set.
 PhotoURL | STRING | The URL for user photo which is set by user or OAuth provider. It could be "" if it is not set.
 InitBal | FLOAT | The user's wallet when join this competition (unit: USD).
