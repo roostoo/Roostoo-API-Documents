@@ -231,5 +231,6 @@ Profit | FLOAT | User profit change since the competition began. (CurrBal-InitBa
 
 Other info:
 
+* The total amount of rank list length is the count of participants but no more than 100.
 * `TotalProfit = 0.0070` means the user total wallet value `increase 0.07%`.
 * `Profit24hr = -0.0107` means the user total wallet value `drop 1.07%`.
