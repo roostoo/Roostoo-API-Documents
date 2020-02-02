@@ -222,7 +222,7 @@ UpdateInterval | INT | The Integer marks as the update interval (minutes).
 DisplayName | STRING | The display name which is set by user OR auto set by OAUTH provider, such as Google OAuth. It could be "" if it is not set.
 PhotoURL | STRING | The URL for user photo which is set by user or OAuth provider. It could be "" if it is not set.
 InitBal | FLOAT | The user's wallet when join this competition (unit: USD).
-CurrBal | FLOAT | TThe user's wallet when last update time of leader board (unit: USD).
+CurrBal | FLOAT | The user's wallet when last update time of leader board (unit: USD).
 TradeVolume | FLOAT | The user's total trade volume during this competition (unit: USD).
 Profit | FLOAT | User profit change since the competition began. (CurrBal-InitBal) / InitBal
 
