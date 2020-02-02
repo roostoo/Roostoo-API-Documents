@@ -165,6 +165,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
   "PublicRank": [
     {
       "Rank": 1,
+      "UserCode": "XX1",
       "Email": "zh***@usc.edu",
       "DisplayName": "",
       "PhotoURL": "",
@@ -175,6 +176,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
     },
     {
       "Rank": 2,
+      "UserCode": "XX2",
       "Email": "na***@gmail.com",
       "DisplayName": "",
       "PhotoURL": "",
@@ -185,6 +187,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
     },
     {
       "Rank": 3,
+      "UserCode": "XX3",
       "Email": "dy***@gmail.com",
       "DisplayName": "",
       "PhotoURL": "",
@@ -219,6 +222,7 @@ Success | BOOL | Indicates is this request success
 ErrMsg | STRING | Error message, if "" means it's passed(Success=true), othervice it tells you about problem.
 LastUpdate | INT | The 13-digits millsecond timestamp marks update time of this rank.
 UpdateInterval | INT | The Integer marks as the update interval (minutes).
+UserCode | STRING | Can be used to identify one user.
 DisplayName | STRING | The display name which is set by user OR auto set by OAUTH provider, such as Google OAuth. It could be "" if it is not set.
 PhotoURL | STRING | The URL for user photo which is set by user or OAuth provider. It could be "" if it is not set.
 InitBal | FLOAT | The user's wallet when join this competition (unit: USD).
