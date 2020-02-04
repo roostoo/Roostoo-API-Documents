@@ -52,13 +52,6 @@ def get_ticker(pair=None):
     return r.json()
 
 
-def get_available_sub():
-    r = requests.get(
-        BASE_URL + "/v3/available_sub",
-    )
-    print r.status_code, r.text
-
-
 def get_balance():
     payload = {
         "timestamp": int(time.time()) * 1000,
@@ -149,7 +142,6 @@ if __name__ == '__main__':
     get_server_time()
     get_ex_info()
     get_ticker()
-    get_available_sub()
     get_balance()
     place_order("BNB", "BUY", 200000)
     cancel_order()

@@ -243,7 +243,7 @@ Other info:
 * `Change` is this pair's 24 hours price percentage change, like `0.0059` you can see it as `0.59%` rise, or `-0.0178` as `1.78%` drop
 
 
-
+<!-- 
 ## Available Stream Subscribe
 ```
 GET /v3/available_sub
@@ -286,7 +286,7 @@ NONE
     ]
   }
 }
-```
+``` -->
 
 
 
