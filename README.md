@@ -6,7 +6,7 @@
 
 * REST API URL: `https://mock-api.roostoo.com`
 
-<!-- * [Python Demo](python_demo.py) -->
+* [Python Demo](python_demo.py)
 
 
 # Document
@@ -14,7 +14,7 @@
 
 ## Public API_KEY & SECRET_KEY 
 
-This pair of keys will generate and send when Roostoo offer you PublicAPI promission
+This pair of keys will generate and send when Roostoo offer you Public API promission
 
 * `RCL_TSCheck` This level need timestamp parameter
 * `RCL_TopLevelCheck` This level need `MSG-SIGNATURE` in header and all above levels requirement
