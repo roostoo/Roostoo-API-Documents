@@ -179,7 +179,7 @@ Auth RCL_TSCheck
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 pair | STRING | NO | `Used with 'EOS/USD', 'TRX/USD', etc.`
 
 **Response if `pair` is sent `(EOS/USD)`**
@@ -301,7 +301,7 @@ Get current wallet balance.
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 
 **Response**
 ```json
@@ -337,7 +337,7 @@ Auth RCL_TopLevelCheck
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 
 **Response when pending order found**
 
@@ -381,7 +381,7 @@ pair | STRING | YES | Used with `BTC/USD`, etc...
 side | STRING | YES | Used with `BUY`, `SELL`
 type | STRING | YES | Used with `LIMIT`, `MARKET`
 quantity | STRING | YES | 
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 price | DECIMAL | NO |
 
 
@@ -464,7 +464,7 @@ Auth RCL_TopLevelCheck
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 order_id | STRING | NO | 
 pair | STRING | NO | Used with `BTC/USD`, etc...
 offset | STRING_INT | NO |  
@@ -575,7 +575,7 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 order_id | STRING | NO |
 pair | STRING | NO | Used with `BTC/USD`, etc...
-timestamp | STRING | YES |
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
 
 
 Other info:
