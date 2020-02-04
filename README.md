@@ -14,7 +14,8 @@
 
 ## Public API_KEY & SECRET_KEY 
 
-This pair of keys will generate and send when Roostoo offer you Public API promission
+`This pair of keys will generate and send when Roostoo offer you Public API promission`
+You can apply API premission by mail developer group [mailto:jolly@roostoo.com](mailto:jolly@roostoo.com)
 
 * `RCL_TSCheck` This level need timestamp parameter
 * `RCL_TopLevelCheck` This level need `MSG-SIGNATURE` in header and all above levels requirement
