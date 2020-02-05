@@ -38,7 +38,7 @@ This pair of keys will generate and send when Roostoo offer you partner promissi
   }
   ```
 
-## SIGNED Endpoint Examples for POST `/v2/add_join_code`
+## SIGNED Endpoint Examples for POST `/v2/gen_join_code`
 Here is a step-by-step example of how to send a vaild signed payload from the
 Linux command line using `echo`, `openssl`.
 
@@ -92,7 +92,7 @@ So:
 ## Add ont-time-join-code
 
 ```
-POST /v2/add_join_code
+POST /v2/gen_join_code
 Auth RCL_TopLevelCheck
 ```
 

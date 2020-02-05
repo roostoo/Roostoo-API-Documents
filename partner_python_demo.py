@@ -15,14 +15,14 @@ PARTNER_ACCOUNT_SECRET = "S1XP1e3UZj6A7H5fATj0jNhqPtmdSJYdInClVN65XAbvqqMKjVHjA7
 BASE_URL = "https://mock-api.roostoo.com"
 
 
-def add_join_code_for_partner():
+def gen_join_code_for_partner():
     payload = {
         "timestamp": int(time.time()) * 1000,
         "bind_email": "lzhao302@usc.edu",
     }
 
     r = requests.post(
-        BASE_URL + "/v2/add_join_code",
+        BASE_URL + "/v2/gen_join_code",
         data=payload,
         headers={
             "RST-API-KEY": PARTNER_ACCOUNT_API_KEY,
@@ -51,4 +51,4 @@ def leader_board_for_partner():
 
 if __name__ == '__main__':
     leader_board_for_partner()
-    add_join_code_for_partner()
+    gen_join_code_for_partner()
