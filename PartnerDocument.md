@@ -89,7 +89,7 @@ So:
 # API for Roostoo Partner
 
 
-## Add ont-time-join-code
+## Add one-time-join-code
 
 ```
 POST /v2/gen_join_code
@@ -140,6 +140,68 @@ BindEmail | STRING | Same as your passed `bind_email` parameter.
 Other info:
 
 * None
+
+
+
+## Add multi one-time-join-code
+
+```
+POST /v2/gen_multi_join_code
+Auth RCL_TopLevelCheck
+```
+
+**Parameters**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
+number | STRING | YES | number of code you need, must within 1~50
+
+**Response if success**
+```json
+{
+  "Success": true,
+  "ErrMsg": "",
+  "Codes": [
+    {
+      "NewJoinCode": "7VCP3JQRUQM7ND5WNA",
+      "ExpireTS": 1596436053
+    },
+    {
+      "NewJoinCode": "UPXXJAEINCNMMR9N05",
+      "ExpireTS": 1596436053
+    },
+    {
+      "NewJoinCode": "KW1IIPTVTPAAYEI75E",
+      "ExpireTS": 1596436053
+    },
+    {
+      "NewJoinCode": "VBHY12RJSU9PRA1NZW",
+      "ExpireTS": 1596436053
+    },
+    {
+      "NewJoinCode": "4S9PQGYPYSLXNACSNQ",
+      "ExpireTS": 1596436053
+    }
+  ]
+}
+```
+
+
+**Return Explain**
+
+Name | Type | Description
+------------ | ------------ | ------------
+Success | BOOL | Indicates is this request success
+ErrMsg | STRING | Error message, if "" means it's passed(Success=true), othervice it tells you about problem.
+NewJoinCode | STRING | The random string which is used for join your competition. 
+ExpireTS | STRING | The 10-digits second timestamp which marks the competition end time.
+
+
+Other info:
+
+* Please note that you cannot bind code for spicific email
+
 
 
 ## Get Leader Board information

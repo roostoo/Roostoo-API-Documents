@@ -32,6 +32,23 @@ def gen_join_code_for_partner():
     print r.status_code, r.text
 
 
+def gen_multi_join_code_for_partner():
+    payload = {
+        "timestamp": int(time.time()) * 1000,
+        "number": 5,
+    }
+
+    r = requests.post(
+        BASE_URL + "/v2/gen_multi_join_code",
+        data=payload,
+        headers={
+            "RST-API-KEY": PARTNER_ACCOUNT_API_KEY,
+            "MSG-SIGNATURE": generate_signature(payload, secret=PARTNER_ACCOUNT_SECRET),
+        }
+    )
+    print r.status_code, r.text
+
+
 def leader_board_for_partner():
     payload = {
         "timestamp": int(time.time()) * 1000,
@@ -52,3 +69,4 @@ def leader_board_for_partner():
 if __name__ == '__main__':
     leader_board_for_partner()
     gen_join_code_for_partner()
+    gen_multi_join_code_for_partner()
