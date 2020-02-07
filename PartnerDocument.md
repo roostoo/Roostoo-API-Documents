@@ -230,6 +230,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
       "UserCode": "XX1",
       "Email": "zh***@usc.edu",
       "DisplayName": "",
+      "CountryCode": "US",
       "PhotoURL": "",
       "InitBal": 50000,
       "CurrBal": 98623.87,
@@ -241,6 +242,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
       "UserCode": "XX2",
       "Email": "na***@gmail.com",
       "DisplayName": "",
+      "CountryCode": "US",
       "PhotoURL": "",
       "InitBal": 50000,
       "CurrBal": 64175.54,
@@ -252,6 +254,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
       "UserCode": "XX3",
       "Email": "dy***@gmail.com",
       "DisplayName": "",
+      "CountryCode": "",
       "PhotoURL": "",
       "InitBal": 50000,
       "CurrBal": 62415.25,
@@ -286,6 +289,7 @@ LastUpdate | INT | The 13-digits millsecond timestamp marks update time of this 
 UpdateInterval | INT | The Integer marks as the update interval (minutes).
 UserCode | STRING | Can be used to identify one user.
 DisplayName | STRING | The display name which is set by user OR auto set by OAUTH provider, such as Google OAuth. It could be "" if it is not set.
+CountryCode | STRING | ISO-3166 2-alpha uppercase country code, it could be empty.
 PhotoURL | STRING | The URL for user photo which is set by user or OAuth provider. It could be "" if it is not set.
 InitBal | FLOAT | The user's wallet when join this competition (unit: USD).
 CurrBal | FLOAT | The user's wallet when last update time of leader board (unit: USD).
@@ -298,3 +302,4 @@ Other info:
 * The total amount of rank list length is the count of participants but no more than 100.
 * `TotalProfit = 0.0070` means the user total wallet value `increase 0.07%`.
 * `Profit24hr = -0.0107` means the user total wallet value `drop 1.07%`.
+* You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png`
