@@ -302,4 +302,4 @@ Other info:
 * The total amount of rank list length is the count of participants but no more than 100.
 * `TotalProfit = 0.0070` means the user total wallet value `increase 0.07%`.
 * `Profit24hr = -0.0107` means the user total wallet value `drop 1.07%`.
-* You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png`
+* You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png` (provide by CDN fast network)
