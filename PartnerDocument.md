@@ -228,6 +228,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
     {
       "Rank": 1,
       "UserCode": "XX1",
+      "JoinCode": "xxxxxxxx",
       "Email": "zh***@usc.edu",
       "DisplayName": "",
       "CountryCode": "US",
@@ -240,6 +241,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
     {
       "Rank": 2,
       "UserCode": "XX2",
+      "JoinCode": "xxxxxxxx",
       "Email": "na***@gmail.com",
       "DisplayName": "",
       "CountryCode": "US",
@@ -252,6 +254,7 @@ timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
     {
       "Rank": 3,
       "UserCode": "XX3",
+      "JoinCode": "xxxxxxxx",
       "Email": "dy***@gmail.com",
       "DisplayName": "",
       "CountryCode": "",
@@ -288,6 +291,7 @@ ErrMsg | STRING | Error message, if "" means it's passed(Success=true), othervic
 LastUpdate | INT | The 13-digits millsecond timestamp marks update time of this rank.
 UpdateInterval | INT | The Integer marks as the update interval (minutes).
 UserCode | STRING | Can be used to identify one user.
+JoinCode | STRING | The code user used when join this competition.
 DisplayName | STRING | The display name which is set by user OR auto set by OAUTH provider, such as Google OAuth. It could be "" if it is not set.
 CountryCode | STRING | ISO-3166 2-alpha uppercase country code, it could be empty.
 PhotoURL | STRING | The URL for user photo which is set by user or OAuth provider. It could be "" if it is not set.
