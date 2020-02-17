@@ -2,12 +2,23 @@
 
 # API SERVICE
 
-* API SERVICE BASED ON GOLANG `gin`
-
 * REST API URL: `https://mock-api.roostoo.com`
 
 * [Python Demo](partner_python_demo.py)
 
+- [RoostooPartnerAPI](#roostoopartnerapi)
+- [API SERVICE](#api-service)
+- [Important](#important)
+  - [Partner API_KEY & SECRET_KEY](#partner-apikey--secretkey)
+  - [RCL_TopLevelCheck (SIGNED) Endpoint security](#rcltoplevelcheck-signed-endpoint-security)
+  - [Timing security](#timing-security)
+  - [SIGNED Endpoint Examples for POST `/v2/gen_join_code`](#signed-endpoint-examples-for-post-v2genjoincode)
+    - [Example 1: As a request body (POST endpoint)](#example-1-as-a-request-body-post-endpoint)
+    - [Example 2: As a query string (GET endpoint)](#example-2-as-a-query-string-get-endpoint)
+- [API for Roostoo Partner](#api-for-roostoo-partner)
+  - [Add one-time-join-code](#add-one-time-join-code)
+  - [Add multi one-time-join-code](#add-multi-one-time-join-code)
+  - [Get Leader Board information](#get-leader-board-information)
 
 # Important
 

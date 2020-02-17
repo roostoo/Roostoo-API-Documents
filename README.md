@@ -2,12 +2,29 @@
 
 # API SERVICE
 
-* API SERVICE BASED ON GOLANG `gin`
-
 * REST API URL: `https://mock-api.roostoo.com`
 
 * [Python Demo](python_demo.py)
 
+- [RoostooPublicAPI](#roostoopublicapi)
+- [API SERVICE](#api-service)
+- [Document](#document)
+  - [Public API_KEY & SECRET_KEY](#public-apikey--secretkey)
+  - [Access Security Level](#access-security-level)
+  - [RCL_TopLevelCheck (SIGNED) Endpoint security](#rcltoplevelcheck-signed-endpoint-security)
+  - [Timing security](#timing-security)
+  - [SIGNED Endpoint Examples for POST `/v3/place_order`](#signed-endpoint-examples-for-post-v3placeorder)
+    - [Example 1: As a request body (POST endpoint)](#example-1-as-a-request-body-post-endpoint)
+    - [Example 2: As a query string (GET endpoint)](#example-2-as-a-query-string-get-endpoint)
+- [Roostoo Public API](#roostoo-public-api)
+  - [Check server time](#check-server-time)
+  - [Exchange information](#exchange-information)
+  - [Get Market Ticker](#get-market-ticker)
+  - [Balance information](#balance-information)
+  - [Pending Order Count](#pending-order-count)
+  - [New order  (Trade)](#new-order-trade)
+  - [Query order](#query-order)
+  - [Cancel order](#cancel-order)
 
 # Document
 
