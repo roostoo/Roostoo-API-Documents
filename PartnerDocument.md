@@ -227,12 +227,15 @@ Auth RCL_TopLevelCheck
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
+lb_level | STRING | NO | `Used with OVERALL/24HOURS/7DAYS/30DAYS, the default is OVERALL`
 
-**Response if success**
+**Response**
+
 ```json
 {
   "Success": true,
   "ErrMsg": "",
+  "Level":"OVERALL",
   "LastUpdate": 1579871672843,
   "UpdateInterval": 5,
   "PublicRank": [
@@ -318,3 +321,4 @@ Other info:
 * `TotalProfit = 0.0070` means the user total wallet value `increase 0.07%`.
 * `Profit24hr = -0.0107` means the user total wallet value `drop 1.07%`.
 * You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png` (provide by CDN fast network)
+* `lb_level` please make sure the competition has the spicific level, everyone will have `OVERALL`. Other levels is not guaranteed.

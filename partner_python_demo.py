@@ -56,6 +56,7 @@ def gen_multi_join_code_for_partner():
 def leader_board_for_partner():
     payload = {
         "timestamp": int(time.time()) * 1000,
+        "lb_level": "OVERALL"
     }
 
     r = requests.get(
