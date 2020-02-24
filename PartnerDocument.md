@@ -321,4 +321,5 @@ Other info:
 * `TotalProfit = 0.0070` means the user total wallet value `increase 0.07%`.
 * `Profit24hr = -0.0107` means the user total wallet value `drop 1.07%`.
 * You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png` (provide by CDN fast network)
-* `lb_level` please make sure the competition has the spicific level, everyone will have `OVERALL`. Other levels is not guaranteed.
+* `lb_level` please make sure the competition has the specific level, everyone will have `OVERALL`. Other levels are not guaranteed.
+
