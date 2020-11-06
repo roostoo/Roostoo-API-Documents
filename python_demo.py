@@ -5,10 +5,11 @@ import requests
 import hashlib
 import hmac
 import time
+from pprint import pprint 
 
 
-API_KEY = "MYAPIKEY"
-SECRET = "MYAPISECRET"
+API_KEY = "jOcEgpTe1PuMMT8mueq2eIkM43sSbThYYlMRfwqeERyDxH2LHHeAdylvEPMQpttx"
+SECRET = "yB3hkXZiYii6qQ3VUmHoMPHxfedfBTcB2iujpObVmbkW96zx95dOLVD2b6hjUHbN"
 
 BASE_URL = "https://mock-api.roostoo.com"
 
@@ -18,23 +19,24 @@ def generate_signature(params):
                              for k in sorted(params.keys())])
     us = SECRET.encode('utf-8')
     m = hmac.new(us, query_string.encode('utf-8'), hashlib.sha256)
-    return m.hexdigest()
-
+    return(m.hexdigest())
 
 def get_server_time():
     r = requests.get(
         BASE_URL + "/v3/serverTime",
     )
-    print r.status_code, r.text
-    return r.json()
+    print (r.status_code)
+    pprint(r.json())
+    return (r.json())
 
 
 def get_ex_info():
     r = requests.get(
         BASE_URL + "/v3/exchangeInfo",
     )
-    print r.status_code, r.text
-    return r.json()
+    print (r.status_code)
+    pprint(r.json())
+    return (r.json())
 
 
 def get_ticker(pair=None):
@@ -48,8 +50,9 @@ def get_ticker(pair=None):
         BASE_URL + "/v3/ticker",
         params=payload,
     )
-    print r.status_code, r.text
-    return r.json()
+    print (r.status_code)
+    pprint(r.json())
+    return (r.json())
 
 
 def get_balance():
@@ -63,8 +66,9 @@ def get_balance():
         headers={"RST-API-KEY": API_KEY,
                  "MSG-SIGNATURE": generate_signature(payload)}
     )
-    print r.status_code, r.text
-    return r.json()
+    print(r.status_code)
+    pprint(r.json())
+    return (r.json())
 
 
 def place_order(coin, side, qty, price=None):
@@ -87,7 +91,8 @@ def place_order(coin, side, qty, price=None):
         headers={"RST-API-KEY": API_KEY,
                  "MSG-SIGNATURE": generate_signature(payload)}
     )
-    print r.status_code, r.text
+    print (r.status_code)
+    pprint(r.json())
 
 
 def cancel_order():
@@ -103,7 +108,8 @@ def cancel_order():
         headers={"RST-API-KEY": API_KEY,
                  "MSG-SIGNATURE": generate_signature(payload)}
     )
-    print r.status_code, r.text
+    print (r.status_code)
+    pprint(r.json())
 
 
 def query_order():
@@ -120,7 +126,8 @@ def query_order():
         headers={"RST-API-KEY": API_KEY,
                  "MSG-SIGNATURE": generate_signature(payload)}
     )
-    print r.status_code, r.text
+    print (r.status_code)
+    pprint(r.json())
 
 
 def pending_count():
@@ -134,10 +141,12 @@ def pending_count():
         headers={"RST-API-KEY": API_KEY,
                  "MSG-SIGNATURE": generate_signature(payload)}
     )
-    print r.status_code, r.text
+    print (r.status_code)
+    pprint(r.json())
     return r.json()
 
-
+#unit test
+#these line of code will not run when you import this module to another file
 if __name__ == '__main__':
     get_server_time()
     get_ex_info()
