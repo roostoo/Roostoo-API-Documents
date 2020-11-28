@@ -8,8 +8,8 @@ import time
 from pprint import pprint 
 
 
-API_KEY = "MYAPIKEY"
-SECRET = "MYAPISECRET"
+API_KEY = "2HSDRRWX6vrBcm48joU4zTtwasHKSfqtPOdh8A4dkfSfApuP3BVjKjJHeBpZ6Ssl"
+SECRET = "f5uPEKT61FUu4vIP87DS2QhV5hL6htLwcceUzu0CQpqSRRdTZKEErqsvrcG1ubYW"
 
 BASE_URL = "https://mock-api.roostoo.com"
 
@@ -71,12 +71,13 @@ def get_balance():
     return (r.json())
 
 
-def place_order(coin, side, qty, price=None):
+def place_order(coin, side, qty, wallet="SPOT", price=None):
     payload = {
         "timestamp": int(time.time()) * 1000,
         "pair": coin + "/USD",
         "side": side,
         "quantity": qty,
+        "wallet": wallet
     }
 
     if not price:
@@ -144,6 +145,25 @@ def pending_count():
     print (r.status_code)
     pprint(r.json())
     return r.json()
+
+def margin_transfer(pair, coin, is_in, qty):
+    payload = {
+        "timestamp": int(time.time()) * 1000,
+        'pair': pair,
+        'coin': coin,
+        'direction': 'IN' if is_in else "OUT",
+        'quantity': qty
+    }
+
+    r = requests.post(
+        BASE_URL + "/v3/inner_transfer",
+        data=payload,
+        headers={
+            "RST-API-KEY": API_KEY,
+            "MSG-SIGNATURE": generate_signature(payload),
+        }
+    )
+    print(r.status_code, r.text)
 
 #unit test
 #these line of code will not run when you import this module to another file
