@@ -176,3 +176,7 @@ if __name__ == '__main__':
     cancel_order()
     query_order()
     pending_count()
+    margin_transfer("BTC", "USD", "IN", 1000)
+    place_order("BTC", "BUY", 0.01, "MARGIN")
+    cancel_order()
+    margin_transfer("BTC", "USD", "OUT", 1000)
