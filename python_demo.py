@@ -8,8 +8,8 @@ import time
 from pprint import pprint 
 
 
-API_KEY = "2HSDRRWX6vrBcm48joU4zTtwasHKSfqtPOdh8A4dkfSfApuP3BVjKjJHeBpZ6Ssl"
-SECRET = "f5uPEKT61FUu4vIP87DS2QhV5hL6htLwcceUzu0CQpqSRRdTZKEErqsvrcG1ubYW"
+API_KEY = "API KEY"
+SECRET = "API SECRET"
 
 BASE_URL = "https://mock-api.roostoo.com"
 
