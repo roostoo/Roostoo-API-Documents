@@ -9,16 +9,17 @@
 - [RoostooPartnerAPI](#roostoopartnerapi)
 - [API SERVICE](#api-service)
 - [Important](#important)
-  - [Partner API_KEY & SECRET_KEY](#partner-apikey--secretkey)
-  - [RCL_TopLevelCheck (SIGNED) Endpoint security](#rcltoplevelcheck-signed-endpoint-security)
+  - [Partner API_KEY & SECRET_KEY](#partner-api_key--secret_key)
+  - [RCL_TopLevelCheck (SIGNED) Endpoint security](#rcl_toplevelcheck-signed-endpoint-security)
   - [Timing security](#timing-security)
-  - [SIGNED Endpoint Examples for POST `/v2/gen_join_code`](#signed-endpoint-examples-for-post-v2genjoincode)
+  - [SIGNED Endpoint Examples for POST `/v2/gen_join_code`](#signed-endpoint-examples-for-post-v2gen_join_code)
     - [Example 1: As a request body (POST endpoint)](#example-1-as-a-request-body-post-endpoint)
     - [Example 2: As a query string (GET endpoint)](#example-2-as-a-query-string-get-endpoint)
 - [API for Roostoo Partner](#api-for-roostoo-partner)
   - [Add one-time-join-code](#add-one-time-join-code)
   - [Add multi one-time-join-code](#add-multi-one-time-join-code)
   - [Get Leader Board information](#get-leader-board-information)
+  - [Create API Key Pair for User](#create-api-key-pair-for-user)
 
 # Important
 
@@ -323,3 +324,41 @@ Other info:
 * You can get country flag image from `https://static.roostoo.com/national-flag/{LowercaseCountryCode}.png` (provide by CDN fast network)
 * `lb_level` please make sure the competition has the specific level, everyone will have `OVERALL`. Other levels are not guaranteed.
 
+
+
+
+## Create API Key Pair for User
+
+```
+POST /v2/create_api
+Auth RCL_TopLevelCheck
+```
+
+**Parameters**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+timestamp | STRING_OF_INT | YES | Used with 13-digits millsecomd timestamp
+email | STRING | YES | user's email address
+
+**Response**
+
+```json
+{
+  "Success": true,
+  "ErrMsg": "",
+  "APIKey": "64lengthKEY",
+  "APISecret": "64lengthSecret"
+}
+
+```
+
+**Response if fail**
+```json
+{
+  "Success": false,
+  "ErrMsg": "your partner access is terminated",
+  "APIKey": 0,
+  "APISecret": 0
+}
+```

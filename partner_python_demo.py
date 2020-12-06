@@ -70,7 +70,26 @@ def leader_board_for_partner():
     print r.status_code, r.text
 
 
+
+def create_api():
+    payload = {
+        "timestamp": int(time.time()) * 1000,
+        "email": "zhaolei@pm.me"
+    }
+
+    r = requests.post(
+        BASE_URL + "/v2/create_api",
+        data=payload,
+        headers={
+            "RST-API-KEY": PARTNER_ACCOUNT_API_KEY,
+            "MSG-SIGNATURE": generate_signature(payload, secret=PARTNER_ACCOUNT_SECRET),
+        }
+    )
+    print r.status_code, r.text
+
+
 if __name__ == '__main__':
     leader_board_for_partner()
     gen_join_code_for_partner()
     gen_multi_join_code_for_partner()
+    create_api()
