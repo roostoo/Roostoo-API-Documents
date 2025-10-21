@@ -117,7 +117,6 @@ import time
 import hmac
 import hashlib
 
-# --- Use the same values from your Postman Environment ---
 BASE_URL = "https://mock-api.roostoo.com"
 API_KEY = "USEAPIKEYASMYID"
 SECRET_KEY = "S1XP1e3UZj6A7H5fATj0jNhqPxxdSJYdInClVN65XAbvqqMKjVHjA7PZj4W12oep"
