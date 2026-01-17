@@ -31,9 +31,9 @@
 
 ## Public API_KEY & SECRET_KEY 
 
-* This pair of keys will generate and send when Roostoo offer you Public API promission
+* This pair of keys will generate and send when Roostoo offer you Public API permission
 
-* You can apply API premission by mail developer group [jolly@roostoo.com](mailto:jolly@roostoo.com)
+* You can apply API permission by mail developer group [jolly@roostoo.com](mailto:jolly@roostoo.com)
 
 ## Access Security Level
 
