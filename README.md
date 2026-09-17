@@ -25,6 +25,9 @@
   - [New order  (Trade)](#new-order-trade)
   - [Query order](#query-order)
   - [Cancel order](#cancel-order)
+  - [Open short position (Trade)](#open-short-position-trade)
+  - [Close short position (Trade)](#close-short-position-trade)
+  - [Get short positions](#get-short-positions)
 
 # Document
 
@@ -307,7 +310,8 @@ NONE
     ]
   }
 }
-``` -->
+```
+-->
 
 
 
@@ -620,6 +624,266 @@ Other info:
 }
 ```
 
+## Open short position (Trade)
+```
+POST /v6/short_open
+Auth RCL_TopLevelCheck
+```
+Open a new short position, or add to the one you already hold on that pair.
+
+Note these short endpoints are served under `/v6` instead of `/v3`. They use the same host, the
+same `API_KEY` / `SECRET_KEY` and the same `RCL_TopLevelCheck` signing rules as the endpoints
+above.
+
+**Parameters**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+pair | STRING | YES | Used with `BTC/USD`, etc...
+collateral | STRING | YES | The USD amount to lock as collateral. Minimum `1`.
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
+order_type | STRING | NO | Used with `LIMIT`. If not sent, or sent with any other value, the order is a market order.
+price | DECIMAL | NO |
+
+
+Additional mandatory parameters based on `order_type`:
+
+Type | Additional mandatory parameters
+------------ | ------------
+`LIMIT` | `price`
+
+Other info:
+
+* There is no `side` or `quantity` parameter. A short is sized by the `collateral` you commit, and
+  the quantity is calculated from it as `collateral / EntryPrice`, rounded down to the pair's
+  `AmountPrecision` from ExchangeInfo.
+* A market order fills immediately at the current best bid (`MaxBid` in the ticker).
+* A `LIMIT` order does not fill when placed. It stays pending until the market reaches your price.
+  If `price` is at or above the current market it fills when the price rises, if it is below the
+  current market it fills when the price drops.
+* The fee is `0.1%` of the position value, the same for market and limit orders. It is
+  `ShortQty * EntryPrice * 0.001`, charged when the request is accepted, including for a `LIMIT`
+  order that has not been filled yet.
+* For example, a short opened with `10000` collateral pays `10` as the open fee, `0.1%` of `10000`.
+* Opening again on a pair you are already short will merge into the existing position, using a
+  quantity weighted average entry price. No second position is created.
+* The pending order created by a `LIMIT` order can be canceled with `POST /v3/cancel_order` using
+  its `order_id`. Canceling releases both the locked collateral and the open fee.
+* Your free `USD` balance must cover `collateral` + fee, otherwise you will get a `ErrMsg` in
+  response.
+
+
+**Response when it's a market order:**
+```json
+{
+  "Success": true,
+  "ID": 412,
+  "Pair": "BTC/USD",
+  "OrderType": "MARKET",
+  "EntryPrice": 50000,
+  "ShortQty": 0.2,
+  "Collateral": 10000,
+  "OpenFee": 10,
+  "Status": "OPEN",
+  "CreateTimestamp": 1757980800000
+}
+```
+**Response when it's a limit order:**
+```json
+{
+  "Success": true,
+  "ID": 90271,
+  "Pair": "BTC/USD",
+  "OrderType": "LIMIT",
+  "EntryPrice": 62500,
+  "ShortQty": 0.16,
+  "Collateral": 10000,
+  "OpenFee": 10,
+  "Status": "PENDING",
+  "CreateTimestamp": 1757980800000
+}
+```
+
+**Return Explain**
+
+Name | Type | Description
+------------ | ------------ | ------------
+ID | INT | When `Status` is `OPEN` this is the short position id, the same id returned by `/v6/short_positions`. When `Status` is `PENDING` this is the order id, used to cancel the order.
+Pair | STRING | The pair of this position.
+OrderType | STRING | `MARKET` or `LIMIT`.
+EntryPrice | FLOAT | The filled price for a market order, or your requested price for a limit order. After a merge it is the weighted average entry price of the whole position.
+ShortQty | FLOAT | The quantity shorted. After a merge it is the total quantity of the whole position.
+Collateral | FLOAT | The USD locked against the position. After a merge it is the total collateral of the whole position.
+OpenFee | FLOAT | The commission charged for this request only, `0.1%` of `ShortQty * EntryPrice`. It is not the cumulative fee of a merged position.
+Status | STRING | `OPEN` means filled and the position is live. `PENDING` means the limit order is waiting to be filled.
+CreateTimestamp | INT | The 13-digits millsecomd timestamp of this request.
+
+
+## Close short position (Trade)
+```
+POST /v6/short_close
+Auth RCL_TopLevelCheck
+```
+Close all or part of an open short position. It always fills immediately at the current best ask
+(`MinAsk` in the ticker).
+
+**Parameters**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+pair | STRING | YES | Used with `BTC/USD`, etc...
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
+close_qty | STRING | NO | The absolute quantity to close.
+close_pct | STRING | NO | The percentage to close, greater than `0` and at most `100`.
+
+Other info:
+
+* if `close_qty` is sent, it takes precedence over `close_pct`.
+* if none of `close_qty` and `close_pct` is sent, system will close the whole position.
+* every close is reduce only. A `close_qty` bigger than the open quantity is reduced to it, so a
+  short can never be over closed or turned into a long.
+* a partial close keeps the entry price unchanged and reduces the quantity and the collateral in
+  proportion. The remaining collateral stays locked until the position is fully closed.
+* a short can never lose more than the collateral backing it, so `RealizedPNL` is capped at that
+  loss.
+* the close fee is `0.1%` of the value you close, `ClosedQty * ClosePrice * 0.001`. In the example
+  below half of a `10000` position is closed, that half is worth `4800` at the close price, so the
+  fee is `4.8`.
+* if the requested part would leave a remainder too small to keep, system will close the whole
+  position instead and `FullyClosed` will be `true`.
+
+
+**Response when it's a partial close:**
+```json
+{
+  "Success": true,
+  "ClosePrice": 48000,
+  "RealizedPNL": 200,
+  "CloseFee": 4.8,
+  "ReturnAmount": 5195.2,
+  "ClosedQty": 0.1,
+  "FullyClosed": false,
+  "RemainingQty": 0.1,
+  "RemainingCollateral": 5000
+}
+```
+**Response when it's a full close:**
+```json
+{
+  "Success": true,
+  "ClosePrice": 48000,
+  "RealizedPNL": 400,
+  "CloseFee": 9.6,
+  "ReturnAmount": 10390.4,
+  "ClosedQty": 0.2,
+  "FullyClosed": true
+}
+```
+
+**Return Explain**
+
+Name | Type | Description
+------------ | ------------ | ------------
+ClosePrice | FLOAT | The price this close was filled at.
+RealizedPNL | FLOAT | The settled profit or loss on the closed part of the position, `ClosedQty * (EntryPrice - ClosePrice)`. It is not rounded, so it can carry many decimal places.
+CloseFee | FLOAT | The commission charged on the closed part, `0.1%` of `ClosedQty * ClosePrice`.
+ReturnAmount | FLOAT | The USD returned to your wallet, `closed collateral + RealizedPNL - CloseFee`. It can be negative when the loss reaches the full collateral.
+ClosedQty | FLOAT | The quantity actually closed.
+FullyClosed | BOOL | `true` if the position is now fully closed, `false` if a part of it is still open.
+RemainingQty | FLOAT | The quantity still open. Not returned when it's a full close.
+RemainingCollateral | FLOAT | The collateral still locked. Not returned when it's a full close.
+
+
+## Get short positions
+```
+GET /v6/short_positions
+Auth RCL_TopLevelCheck
+```
+Get all your currently open short positions, with live profit and loss.
+
+**Parameters**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+timestamp | STRING | YES | Used with 13-digits millsecomd timestamp
+
+Other info:
+
+* only open positions are returned. Closed positions can be found in your order history with
+  `POST /v3/query_order`, where opening and closing a short appear as orders with `Side` =
+  `SHORT_OPEN` and `Side` = `SHORT_CLOSE`.
+* `Positions` is always a list. It is `[]` when no position is open, never `null`.
+* `UnrealizedPNL` is the value a close would realize before the close fee is charged.
+
+
+**Response when at least one position is open:**
+```json
+{
+  "Success": true,
+  "Positions": [
+    {
+      "ID": 412,
+      "Pair": "BTC/USD",
+      "EntryPrice": 50000,
+      "ShortQty": 0.2,
+      "Collateral": 10000,
+      "CurrentPrice": 48000,
+      "UnrealizedPNL": 400,
+      "UnrealizedPNLPct": 0.04,
+      "PositionValue": 10400,
+      "CreateTimestamp": 1757980800000,
+      "PositionStatus": "OPEN"
+    }
+  ]
+}
+```
+**Response when no position is open:**
+```json
+{
+  "Success": true,
+  "Positions": []
+}
+```
+
+**Return Explain**
+
+Name | Type | Description
+------------ | ------------ | ------------
+ID | INT | The short position id, the same id returned by `/v6/short_open` when `Status` is `OPEN`.
+Pair | STRING | The pair of this position.
+EntryPrice | FLOAT | The weighted average entry price of the position.
+ShortQty | FLOAT | The quantity shorted.
+Collateral | FLOAT | The USD locked against the position.
+CurrentPrice | FLOAT | The current market price a close would be filled at, the pair's `MinAsk`.
+UnrealizedPNL | FLOAT | The profit or loss if the position were closed now, before the close fee.
+UnrealizedPNLPct | FLOAT | `UnrealizedPNL` against the collateral, like `0.04` you can see it as `4%` profit, or `-0.0107` as `1.07%` loss.
+PositionValue | FLOAT | `Collateral + UnrealizedPNL`, what a full close is worth before the fee.
+CreateTimestamp | INT | The 13-digits millsecomd timestamp when the position was opened.
+PositionStatus | STRING | Always `OPEN` on this endpoint.
+
+
+**Response when a short request fails:**
+```json
+{
+  "Success": false,
+  "ErrMsg": "insufficient balance"
+}
+```
+
+Other info for all three short endpoints:
+
+* Like the endpoints above, a failed request is still answered with http `200` and an `ErrMsg`, so
+  always check the `Success` flag.
+* Common `ErrMsg` values are `insufficient balance`, `minimum collateral is $1`, `pair not found`,
+  `no open short position for this pair`, `this competition does not allow short positions`,
+  `limit order requires a price` and `your do not have permission to trade`.
+* A field whose value is zero is left out of the response instead of being returned as `0`. For
+  example `OpenFee` is not returned when the fee is zero, and `RemainingQty` is not returned when
+  it's a full close. Read a missing field as `0`.
+* Only the parameters listed for each endpoint are used to build the signature on the server side.
+  Any other parameter you send is ignored there, so if you include it in your own signature the
+  request will be rejected.
+
 ## Sample Python Code
 ```python
 import requests
@@ -822,6 +1086,76 @@ def cancel_order(order_id=None, pair=None):
 
 
 # ------------------------------
+# Short Endpoints
+# ------------------------------
+
+def short_open(pair, collateral, price=None):
+    """
+    Open a short position. A short is sized by collateral, not quantity.
+    Passing 'price' rests a LIMIT order instead of filling at market.
+    """
+    url = f"{BASE_URL}/v6/short_open"
+    payload = {
+        'pair': pair,
+        'collateral': str(collateral)
+    }
+    if price is not None:
+        payload['order_type'] = 'LIMIT'
+        payload['price'] = str(price)
+
+    headers, _, total_params = _get_signed_headers(payload)
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
+
+    try:
+        res = requests.post(url, headers=headers, data=total_params)
+        res.raise_for_status()
+        return res.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error opening short: {e}")
+        print(f"Response text: {e.response.text if e.response else 'N/A'}")
+        return None
+
+
+def short_close(pair, close_qty=None, close_pct=None):
+    """
+    Close a short position. Sending no size closes the whole position.
+    close_qty takes precedence over close_pct, so send only one of them.
+    """
+    url = f"{BASE_URL}/v6/short_close"
+    payload = {'pair': pair}
+    if close_qty is not None:
+        payload['close_qty'] = str(close_qty)
+    elif close_pct is not None:
+        payload['close_pct'] = str(close_pct)
+
+    headers, _, total_params = _get_signed_headers(payload)
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
+
+    try:
+        res = requests.post(url, headers=headers, data=total_params)
+        res.raise_for_status()
+        return res.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error closing short: {e}")
+        print(f"Response text: {e.response.text if e.response else 'N/A'}")
+        return None
+
+
+def get_short_positions():
+    """Get all open short positions with live PnL."""
+    url = f"{BASE_URL}/v6/short_positions"
+    headers, payload, _ = _get_signed_headers({})
+    try:
+        res = requests.get(url, headers=headers, params=payload)
+        res.raise_for_status()
+        return res.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error getting short positions: {e}")
+        print(f"Response text: {e.response.text if e.response else 'N/A'}")
+        return None
+
+
+# ------------------------------
 # Quick Demo Section
 # ------------------------------
 if __name__ == "__main__":
@@ -850,6 +1184,15 @@ if __name__ == "__main__":
     print(place_order("BNB/USD", "SELL", 1))             # MARKET       
     print(query_order(pair="BNB/USD", pending_only=False))
     # print(cancel_order(pair="BNB/USD"))
+
+    print("\n--- Getting Short Positions ---")
+    print(get_short_positions())
+
+    # Uncomment these to test shorting actions:
+    # print(short_open("BTC/USD", 1000))                 # MARKET short, $1000 collateral
+    # print(short_open("BTC/USD", 1000, price=62500))    # LIMIT short, rests until filled
+    # print(short_close("BTC/USD", close_pct=50))        # close half
+    # print(short_close("BTC/USD"))                      # close the rest
 
 
 ```
